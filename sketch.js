@@ -2,6 +2,12 @@ let capture;
 let newsData;
 var newsState = -1;
 var weather;
+var twitterButton;
+var newsButton;
+var twitterState = 1;
+var newsState2 = 1;
+var calendarButton;
+var calendarState = 1;
 
 function preload(){
   //URL for JSON data API's
@@ -16,6 +22,30 @@ function setup() {
   canvas = createCanvas(1000, 655);
   canvas.position(0,0);
   canvas.style('z-index', '-1');
+  
+  //News button
+  newsButton = createImg('newsIcon.png');
+  newsButton.position(320, 590);
+  newsButton.size(50,50);
+  newsButton.mousePressed(newsTog);
+  newsButton.id('newsButton');
+  
+  //Calendar button
+  calendarButton = createImg('calendarIcon.png');
+  calendarButton.position(390, 590);
+  calendarButton.size(50,50);
+  calendarButton.mousePressed(calendarTog);
+  calendarButton.id('calendarButton');
+   document.getElementById("calendar").style.display = "none";
+  
+  
+  //Twitter button
+  twitterButton = createImg('small-twitter-icon-17.jpg');
+  twitterButton.position(250, 590);
+  twitterButton.size(50,50);
+  twitterButton.mousePressed(twitterTog);
+  document.getElementById("twitter").style.display = "none";
+
   
   capture = createCapture(VIDEO);
   capture.size(420,460);
@@ -33,8 +63,10 @@ function draw() {
   
 
   //NewsFeed
+  if(newsState2 == 0){
     topThree(newsData);
   getArticle(newsData,newsState);
+  }
   // print(mouseX);
 
   
@@ -67,6 +99,40 @@ function mousePressed(){
     newsState = -1;
   }
 }
+
+function twitterTog(){
+  if(twitterState == 0){
+  document.getElementById("twitter").style.display = "block";
+    twitterState = 1;
+  }
+  else{
+      document.getElementById("twitter").style.display = "none";
+    twitterState = 0;
+  }
+}
+
+function calendarTog(){
+  if(calendarState == 0){
+  document.getElementById("calendar").style.display = "block";
+    calendarState = 1;
+  }
+  else{
+      document.getElementById("calendar").style.display = "none";
+    calendarState = 0;
+  }
+}
+
+function newsTog(){
+  if(newsState2 == 0){
+    newsState2 = 1;
+  }
+  else{
+    newsState2 = 0;
+  }
+}
+
+
+
 
 function getWeather(data){
   var weather = data.main.temp;
@@ -106,7 +172,12 @@ function getArticle(data,i){
   textSize(12);
   textStyle(NORMAL);
   var description = data.articles[i].description
+  if(description!=null){
   text(description, 340,185,330,390);  
+  }
+  else{
+    text("NO CONTENT TO SHOW", 340,185,330,390);
+  }
   
   //Published
   textSize(12);

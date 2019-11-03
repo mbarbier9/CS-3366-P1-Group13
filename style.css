@@ -9,3 +9,11 @@ canvas {
 #calendar iframe{
   border-radius: 5px;
 }
+
+#newsButton {
+  border-radius: 25px;
+}
+
+#calendarButton {
+  border-radius: 30px;
+}
