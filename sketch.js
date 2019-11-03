@@ -7,41 +7,33 @@ function preload(){
   //URL for JSON data API's
   let urlNews = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=da22bf531795458d9a190346f5d06f9a';
   let urlWeather = 'http://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b6907d289e10d714a6e88b30761fae22';
-  
   //Loading data
   newsData = loadJSON(urlNews);
   //weatherData = loadJSON(urlWeather);
 }
 
 function setup() {
-  createCanvas(420, 460);
+  canvas = createCanvas(1000, 655);
+  canvas.position(0,0);
+  canvas.style('z-index', '-1');
+  
   capture = createCapture(VIDEO);
   capture.size(420,460);
   capture.hide();
   textSize(14);
   fill(255);
+  capture.hide();
   
   weather = Math.floor(Math.random() * 10)+55;
-  
 }
 
 function draw() {
   background(255);
-  imageCap =  image(capture,0,0,420,460);
+  imageCap =  image(capture,0,0,900,655);
   
-  //Time
-  textSize(15);
-  fill(255);
-  text(formatAMPM(new Date),20,20);
-  topThree(newsData);
-  
-  //Weather
-  //getWeather(weatherData);
-  textSize(14);
-  text(weather+" °F",20,36);
-  topThree(newsData);
-  
+
   //NewsFeed
+    topThree(newsData);
   getArticle(newsData,newsState);
   // print(mouseX);
 
@@ -49,24 +41,24 @@ function draw() {
 }
 
 function mousePressed(){
-  if(mouseY>=30 && mouseY<=150 && mouseX>=280 && mouseX<=400){
+  if(mouseY>=30 && mouseY<=150 && mouseX>=700 && mouseX<=900){
     if(mouseY>=30 && mouseY<=60){
-      if(mouseX>=280 && mouseX<=400){
+      if(mouseX>=700 && mouseX<=900){
         newsState = 0;
        }
     }
     if(mouseY>=60 && mouseY<=90){
-      if(mouseX>=280 && mouseX<=400){
+      if(mouseX>=700 && mouseX<=900){
         newsState = 1;
        }
     }
     if(mouseY>=90 && mouseY<=120){
-      if(mouseX>=280 && mouseX<=400){
+      if(mouseX>=700 && mouseX<=900){
         newsState = 2;
        }
     }
     if(mouseY>=120 && mouseY<=150){
-      if(mouseX>=280 && mouseX<=400){
+      if(mouseX>=700 && mouseX<=900){
         newsState = 3;
        }
     }
@@ -86,38 +78,41 @@ function getArticle(data,i){
   if(i==-1){
   }
   else{
-  imageCap =  image(capture,0,0,420,460);
+    
   textSize(15);
-  fill(255);
+  fill("#838383");
   // text(formatAMPM(new Date),20,20);
-  
-  rect(40, 40, 350, 350, 20);
+    
+  rect(335, 5, 350, 350, 20);
   
   //Title
   var title = data.articles[i].title
-  fill(0);
+  fill(255);
   textStyle(BOLD);
-  text(title,50, 50, 340, 390 );
+  text(title,340, 15, 340, 390 );
   
   //Body
   textSize(12);
   textStyle(NORMAL);
   var content = data.articles[i].content
   if(content!=null){
-    text(content, 55,120,330,390);
+    text(content, 340,90,330,390);
+  }
+  else{
+    text("NO CONTENT TO SHOW", 340,90,330,390);
   }
   
   //Description
   textSize(12);
   textStyle(NORMAL);
   var description = data.articles[i].description
-  text(description, 55,220,330,390);  
+  text(description, 340,185,330,390);  
   
   //Published
   textSize(12);
   textStyle(NORMAL);
   var published = data.articles[i].publishedAt
-  text("Published at:\n"+published, 55,340,340,390);
+  text("Published at:\n"+published, 340,315,340,390);
   }
   
 }
@@ -135,25 +130,29 @@ function formatAMPM(date) {
 }
 
 function topThree(data){
+  fill("#838383");
+  rect(687, 03, 200, 150, 7);
   textSize(15);
-  text("News",290,20);
+  
+  fill(255);
+  text("News",700,20);
   var count = 30;
   
   for(var i = 0; i<4; i++){
     var titles = data.articles[i].title;
     
-    if(titles.length>34){
-      titles = titles.substring(0,33);
+    if(titles.length>51){
+      titles = titles.substring(0,50);
       titles = titles+"...";
     }
+    fill(255);
     textSize(12);
-    text("-", 280,count,120,30);
-    text(titles, 290,count,120,30);
+    text("-", 690,count,160,30);
+    text(titles, 700,count,190,30);
     count+=30;
   }
-  strokeWeight(.8);
-  stroke(255);
-  line(280, 150, 400, 150);
+
+  //line(690, 150, 895, 150);
 }
 
 function gotData(data){
